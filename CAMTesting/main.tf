@@ -4,6 +4,8 @@
 ##
 #####################################################################
 
+## REFERENCE {"azure_network":{"type": "azurerm_reference_network"}}
+
 terraform {
   required_version = "> 0.8.0"
 }
@@ -22,6 +24,7 @@ resource "azurerm_virtual_machine" "MSLinux" {
   location              = "${var.vm_location}"
   vm_size               = "${var.vm_size}"
   resource_group_name = "${var.MSLinux_os_profile_name}"  # Specifies the os profile name.
+  network_interface_ids = ["${azurerm_network_interface.interface.id}"]
   tags {
     Name = "${var.MSLinux_name}"
   }
@@ -51,4 +54,22 @@ resource "azurerm_virtual_machine" "MSLinux" {
 resource "azurerm_resource_group" "group" {
   name     = "group"
   location = "${var.location}"
+}
+
+resource "azurerm_network_interface" "interface" {
+  name                = "${var.network_interface_name}"
+  location            = "${var.vm_location}"
+  resource_group_name = "${var.MSLinux_os_profile_name}"
+  ip_configuration {
+    name                          = "ipConfig"
+    private_ip_address_allocation = "Static"
+    subnet_id  = "${azurerm_subnet.subnet.id}"
+  }
+}
+
+resource "azurerm_subnet" "subnet" {
+  name                 = "subnet"
+  virtual_network_name = "${var.subnet_reference_network_name}"
+  address_prefix       = "${var.address_prefix}"
+  resource_group_name  = "${var.MSLinux_os_profile_name}"
 }

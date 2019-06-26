@@ -115,3 +115,18 @@ variable "location" {
   description = "Generated"
 }
 
+variable "network_interface_name" {
+  type = "string"
+  description = "Network Interface Name"
+}
+
+variable "subnet_reference_network_name" {
+  type = "string"
+  description = "Generated"
+}
+
+variable "address_prefix" {
+  type = "string"
+  description = "Generated"
+}
+
