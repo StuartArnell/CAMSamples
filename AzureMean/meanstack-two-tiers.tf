@@ -51,6 +51,7 @@ variable "admin_user" {
 
 variable "admin_user_password" {
   description = "Password of the newly created administrative user"
+  default     = "ibmadmin"
 }
 
 variable "user_public_key" {
